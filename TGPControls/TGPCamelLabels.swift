@@ -2,22 +2,22 @@ import UIKit
 
 //  Interface builder hides the IBInspectable for UIControl
 #if TARGET_INTERFACE_BUILDER
-public class TGPCamelLabels_INTERFACE_BUILDER:UIView {
+public class TGPCamelLabelsInterfaceBuilder: UIView {
 }
 #else // !TARGET_INTERFACE_BUILDER
-public class TGPCamelLabels_INTERFACE_BUILDER:UIControl {
+public class TGPCamelLabelsInterfaceBuilder: UIControl {
 }
 #endif // TARGET_INTERFACE_BUILDER
 
 @IBDesignable
-public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
+public class TGPCamelLabels: TGPCamelLabelsInterfaceBuilder { //swiftlint:disable:this type_body_length
 
     let validAttributes = [NSLayoutConstraint.Attribute.top.rawValue,      //  3
         NSLayoutConstraint.Attribute.centerY.rawValue,  // 10
         NSLayoutConstraint.Attribute.bottom.rawValue]   //  4
 
     // Only used if labels.count < 1
-    @IBInspectable public var tickCount:Int {
+    @IBInspectable public var tickCount: Int {
         get {
             return names.count
         }
@@ -29,56 +29,56 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
         }
     }
 
-    @IBInspectable public var ticksDistance:CGFloat = 44.0 {
+    @IBInspectable public var ticksDistance: CGFloat = 44.0 {
         didSet {
             ticksDistance = max(0, ticksDistance)
             layoutTrack()
         }
     }
 
-    @IBInspectable public var value:UInt = 0 {
+    @IBInspectable public var value: UInt = 0 {
         didSet {
             dockEffect(duration: animationDuration)
         }
     }
 
-    @IBInspectable public var upFontName:String? = nil {
+    @IBInspectable public var upFontName: String? = nil {
         didSet {
             layoutTrack()
         }
     }
 
-    @IBInspectable public var upFontSize:CGFloat = 12 {
+    @IBInspectable public var upFontSize: CGFloat = 12 {
         didSet {
             layoutTrack()
         }
     }
 
-    @IBInspectable public var upFontColor:UIColor? = nil {
+    @IBInspectable public var upFontColor: UIColor? = nil {
         didSet {
             layoutTrack()
         }
     }
 
-    @IBInspectable public var downFontName:String? = nil {
+    @IBInspectable public var downFontName: String? = nil {
         didSet {
             layoutTrack()
         }
     }
 
-    @IBInspectable public var downFontSize:CGFloat = 12 {
+    @IBInspectable public var downFontSize: CGFloat = 12 {
         didSet {
             layoutTrack()
         }
     }
 
-    @IBInspectable public var downFontColor:UIColor? = nil {
+    @IBInspectable public var downFontColor: UIColor? = nil {
         didSet {
             layoutTrack()
         }
     }
 
-    @IBInspectable public var numberOfLinesInLabel:Int = 1 {
+    @IBInspectable public var numberOfLinesInLabel: Int = 1 {
         didSet {
             layoutTrack()
         }
@@ -86,14 +86,14 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
 
     // Label off-center to the left and right of the slider
     // expressed in label width. 0: none, -1/2: half outside, 1/2; half inside
-    @IBInspectable public var offCenter:CGFloat = 0 {
+    @IBInspectable public var offCenter: CGFloat = 0 {
         didSet {
             layoutTrack()
         }
     }
 
     // Label margins to the left and right of the slider
-    @IBInspectable public var insets:NSInteger = 0 {
+    @IBInspectable public var insets: NSInteger = 0 {
         didSet {
             layoutTrack()
         }
@@ -102,7 +102,7 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
     // Where should emphasized labels be drawn (10: centerY, 3: top, 4: bottom)
     // By default, emphasized labels are animated towards the top of the frame.
     // This creates the dock effect (camel). They can also be centered vertically, or move down (reverse effect).
-    @IBInspectable public var emphasisLayout:Int = NSLayoutConstraint.Attribute.top.rawValue {
+    @IBInspectable public var emphasisLayout: Int = NSLayoutConstraint.Attribute.top.rawValue {
         didSet {
             if !validAttributes.contains(emphasisLayout) {
                 emphasisLayout = NSLayoutConstraint.Attribute.top.rawValue
@@ -114,7 +114,7 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
     // Where should regular labels be drawn (10: centerY, 3: top, 4: bottom)
     // By default, emphasized labels are animated towards the bottom of the frame.
     // This creates the dock effect (camel). They can also be centered vertically, or move up (reverse effect).
-    @IBInspectable public var regularLayout:Int = NSLayoutConstraint.Attribute.bottom.rawValue {
+    @IBInspectable public var regularLayout: Int = NSLayoutConstraint.Attribute.bottom.rawValue {
         didSet {
             if !validAttributes.contains(regularLayout) {
                 regularLayout = NSLayoutConstraint.Attribute.bottom.rawValue
@@ -143,9 +143,10 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
         }
     }
 
+    //********************************************
     // MARK: Properties
-    
-    public var names:[String] = [] { // Will dictate the number of ticks
+    //********************************************
+    public var names: [String] = [] { // Will dictate the number of ticks
         didSet {
             assert(names.count > 0)
             layoutTrack()
@@ -160,16 +161,17 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
         }
     }
 
-    public var animationDuration:TimeInterval = 0.15
+    public var animationDuration: TimeInterval = 0.15
 
     // Private
     var lastValue = NSNotFound
-    var emphasizedLabels:[UILabel] = []
-    var regularLabels:[UILabel] = []
+    var emphasizedLabels: [UILabel] = []
+    var regularLabels: [UILabel] = []
     var localeCharacterDirection = CFLocaleLanguageDirection.leftToRight
 
+    //********************************************
     // MARK: UIView
-
+    //********************************************
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         initProperties()
@@ -205,18 +207,18 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
         layoutTrack()
     }
 
-    func debugNames(count:Int) {
+    func debugNames(count: Int) {
         // Dynamic property, will create an array with labels, generally for debugging purposes
-        var array:[String] = []
+        var array: [String] = []
         for iterate in 1...count {
             array.append("\(iterate)")
         }
         names = array
     }
 
-    func layoutTrack() {
+    func layoutTrack() { //swiftlint:disable:this function_body_length
 
-        func insetLabel(_ label:UILabel?, withInset inset:NSInteger, andMultiplier multiplier:CGFloat) {
+        func insetLabel(_ label: UILabel?, withInset inset: NSInteger, andMultiplier multiplier: CGFloat) {
             assert(label != nil)
             if let label = label {
                 label.frame = {
@@ -277,13 +279,13 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
                 regularLabels.append(dnLabel)
                 dnLabel.text = name
                 if let downFontName = downFontName {
-                    dnLabel.font = UIFont.init(name:downFontName, size:downFontSize)
+                    dnLabel.font = UIFont.init(name: downFontName, size: downFontSize)
                 } else {
                     dnLabel.font = UIFont.boldSystemFont(ofSize: downFontSize)
                 }
                 dnLabel.textColor = downFontColor ?? UIColor.gray
                 dnLabel.sizeToFit()
-                dnLabel.center = CGPoint(x:centerX, y:centerY)
+                dnLabel.center = CGPoint(x: centerX, y: centerY)
                 dnLabel.frame = {
                     var frame = dnLabel.frame
                     frame.origin.y = bounds.height - frame.height
@@ -308,13 +310,11 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
                 insetLabel(regularLabels.last, withInset: -localeInsets, andMultiplier: -localeOffCenter)
             }
 
-            dockEffect(duration:0.0)
+            dockEffect(duration: 0.0)
         }
     }
 
-
-    func dockEffect(duration:TimeInterval)
-    {
+    func dockEffect(duration: TimeInterval) {
         let emphasized = Int(value)
 
         // Unlike the National Parks from which it is inspired, this Dock Effect
@@ -326,46 +326,30 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
         // Each animation picks up where the previous left off
         let moveBlock:() -> Void = {
             // De-emphasize almost all
-            for (idx, label) in self.emphasizedLabels.enumerated() {
-                if emphasized != idx {
-                    self.verticalAlign(aView: label,
-                                       alpha: 0,
-                                       attribute: self.regularLayoutAttribute)
-                }
+            for (idx, label) in self.emphasizedLabels.enumerated() where emphasized != idx {
+                self.verticalAlign(aView: label, alpha: 0, attribute: self.regularLayoutAttribute)
             }
-            for (idx, label) in self.regularLabels.enumerated() {
-                if emphasized != idx {
-                    self.verticalAlign(aView: label,
-                                       alpha: 1,
-                                       attribute: self.regularLayoutAttribute)
-                }
+            for (idx, label) in self.regularLabels.enumerated() where emphasized != idx {
+                self.verticalAlign(aView: label, alpha: 1, attribute: self.regularLayoutAttribute)
             }
 
             // Emphasize the selection
             if emphasized < self.emphasizedLabels.count {
-                self.verticalAlign(aView: self.emphasizedLabels[emphasized],
-                                   alpha:1,
-                                   attribute: self.emphasisLayoutAttribute)
+                self.verticalAlign(aView: self.emphasizedLabels[emphasized], alpha: 1, attribute: self.emphasisLayoutAttribute)
             }
             if emphasized < self.regularLabels.count {
-                self.verticalAlign(aView: self.regularLabels[emphasized],
-                                   alpha:0,
-                                   attribute: self.emphasisLayoutAttribute)
+                self.verticalAlign(aView: self.regularLabels[emphasized], alpha: 0, attribute: self.emphasisLayoutAttribute)
             }
         }
 
         if duration > 0 {
-            UIView.animate(withDuration: duration,
-                           delay: 0,
-                           options: [.beginFromCurrentState, .curveLinear],
-                           animations: moveBlock,
-                           completion: nil)
+            UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, .curveLinear], animations: moveBlock, completion: nil)
         } else {
             moveBlock()
         }
     }
-    
-    func verticalAlign(aView:UIView, alpha:CGFloat, attribute layout: NSLayoutConstraint.Attribute) {
+
+    func verticalAlign(aView: UIView, alpha: CGFloat, attribute layout: NSLayoutConstraint.Attribute) {
         switch layout {
         case .top:
             aView.frame = {
@@ -392,11 +376,11 @@ public class TGPCamelLabels: TGPCamelLabels_INTERFACE_BUILDER {
     }
 }
 
-extension TGPCamelLabels : TGPControlsTicksProtocol {
+extension TGPCamelLabels: TGPControlsTicksProtocol {
     public func tgpTicksDistanceChanged(ticksDistance: CGFloat, sender: AnyObject) {
         self.ticksDistance = ticksDistance
     }
-    
+
     public func tgpValueChanged(value: UInt) {
         self.value = value
     }
