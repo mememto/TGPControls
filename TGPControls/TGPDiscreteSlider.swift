@@ -638,12 +638,12 @@ public class TGPDiscreteSlider:TGPSlider_INTERFACE_BUILDER {
         touchedInside = true
 
         touchDown(touches, animationDuration: 0.1)
-        sendActionForControlEvent(controlEvent: .valueChanged, with: event)
-        sendActionForControlEvent(controlEvent: .touchDown, with:event)
+        sendActions(for: .valueChanged, with: event)
+        sendActions(for: .touchDown, with:event)
 
         if let touch = touches.first {
             if touch.tapCount > 1 {
-                sendActionForControlEvent(controlEvent: .touchDownRepeat, with: event)
+                sendActions(for: .touchDownRepeat, with: event)
             }
         }
     }
@@ -652,31 +652,28 @@ public class TGPDiscreteSlider:TGPSlider_INTERFACE_BUILDER {
         touchDown(touches, animationDuration:0)
 
         let inside = touchesAreInside(touches)
-        sendActionForControlEvent(controlEvent: .valueChanged, with: event)
+        sendActions(for: .valueChanged, with: event)
 
         if inside != touchedInside { // Crossing boundary
-            sendActionForControlEvent(controlEvent: (inside) ? .touchDragEnter : .touchDragExit,
-                                      with: event)
+            sendActions(for: inside ? .touchDragEnter : .touchDragExit, with: event)
             touchedInside = inside
         }
         // Drag
-        sendActionForControlEvent(controlEvent: (inside) ? .touchDragInside : .touchDragOutside,
-                                  with: event)
+        sendActions(for: inside ? .touchDragInside : .touchDragOutside, with: event)
     }
 
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchUp(touches)
 
-        sendActionForControlEvent(controlEvent: .valueChanged, with: event)
-        sendActionForControlEvent(controlEvent: (touchesAreInside(touches)) ? .touchUpInside : .touchUpOutside,
-                                  with: event)
+        sendActions(for: .valueChanged, with: event)
+        sendActions(for: touchesAreInside(touches) ? .touchUpInside : .touchUpOutside, with: event)
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchUp(touches)
 
-        sendActionForControlEvent(controlEvent: .valueChanged, with:event)
-        sendActionForControlEvent(controlEvent: .touchCancel, with:event)
+        sendActions(for: .valueChanged, with:event)
+        sendActions(for: .touchCancel, with:event)
     }
 
 
@@ -752,9 +749,9 @@ public class TGPDiscreteSlider:TGPSlider_INTERFACE_BUILDER {
         return UInt(round( Double(segments) * ratio))
     }
 
-    func sendActionForControlEvent(controlEvent:UIControlEvents, with event:UIEvent?) {
+    func sendActions(for controlEvents: UIControl.Event, with event: UIEvent?) {
         for target in allTargets {
-            if let caActions = actions(forTarget: target, forControlEvent: controlEvent) {
+            if let caActions = actions(forTarget: target, forControlEvent: controlEvents) {
                 for actionName in caActions {
                     sendAction(NSSelectorFromString(actionName), to: target, for: event)
                 }
