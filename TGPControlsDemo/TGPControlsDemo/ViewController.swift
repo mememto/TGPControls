@@ -26,6 +26,9 @@ class ViewController: UIViewController {
             })
     }
 
+    //********************************************
+    // MARK: - Initialization
+    //********************************************
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,7 +50,6 @@ class ViewController: UIViewController {
         switch2Camel.names = [NSLocalizedString("switch2Camel.off", comment: ""),
                               NSLocalizedString("switch2Camel.on", comment: "")]
 
-
         // Automatically track tick spacing changes and UIControlEventValueChanged
         alphabetSlider.ticksListener = alphabetLabels
         oneTo10Slider.ticksListener = oneTo10Labels
@@ -64,10 +66,13 @@ class ViewController: UIViewController {
         dualColorSlider.addTarget(self, action: #selector(ViewController.touchUpOutside(_:event:)), for: .touchUpOutside)
         dualColorSlider.addTarget(self, action: #selector(ViewController.touchCancel(_:event:)), for: .touchCancel)
         dualColorSlider.addTarget(self, action: #selector(ViewController.valueChanged(_:event:)), for: .valueChanged)
+
+        oneTo10Slider.addTarget(self, action: #selector(oneTo10ValueChanged(_:event:)), for: .valueChanged)
     }
 
+    //********************************************
     // MARK: - UISwitch
-
+    //********************************************
     @IBAction func switch1ValueChanged(_ sender: UISwitch) {
         switch1Camel.value = (sender.isOn) ? 1 : 0
     }
@@ -76,44 +81,49 @@ class ViewController: UIViewController {
         switch2Camel.value = (sender.isOn) ? 1 : 0
     }
 
-    // MARK: - UIControlEvents
+    //********************************************
+    // MARK: - UIControl Events
+    //********************************************
 
-    @objc func touchDown(_ sender: UIControl, event:UIEvent) {
+    @objc func touchDown(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchDown"
     }
-    @objc func touchDownRepeat(_ sender: UIControl, event:UIEvent) {
+    @objc func touchDownRepeat(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchDownRepeat"
     }
-    @objc func touchDragInside(_ sender: UIControl, event:UIEvent) {
+    @objc func touchDragInside(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchDragInside"
     }
-    @objc func touchDragOutside(_ sender: UIControl, event:UIEvent) {
+    @objc func touchDragOutside(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchDragOutside"
     }
-    @objc func touchDragEnter(_ sender: UIControl, event:UIEvent) {
+    @objc func touchDragEnter(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchDragEnter"
     }
-    @objc func touchDragExit(_ sender: UIControl, event:UIEvent) {
+    @objc func touchDragExit(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchDragExit"
     }
-    @objc func touchUpInside(_ sender: UIControl, event:UIEvent) {
+    @objc func touchUpInside(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchUpInside"
     }
-    @objc func touchUpOutside(_ sender: UIControl, event:UIEvent) {
+    @objc func touchUpOutside(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchUpOutside"
     }
-    @objc func touchCancel(_ sender: UIControl, event:UIEvent) {
+    @objc func touchCancel(_ sender: UIControl, event: UIEvent) {
         controlEventsLabel.text = "touchCancel"
     }
-    @objc func valueChanged(_ sender: TGPDiscreteSlider, event:UIEvent) {
+    @objc func valueChanged(_ sender: TGPDiscreteSlider, event: UIEvent) {
         controlEventsLabel.text = "valueChanged"
         stepper.value = Double(sender.value)
     }
+    @objc func oneTo10ValueChanged(_ sender: TGPDiscreteSlider, event: UIEvent) {
+        NSLog("sender.value \(sender.value)")
+    }
 
+    //********************************************
     // MARK: - UIStepper
-
+    //********************************************
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
         dualColorSlider.value = CGFloat(sender.value)
     }
 }
-
