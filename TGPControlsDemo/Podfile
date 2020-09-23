@@ -3,8 +3,8 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'TGPControlsDemo-Pods' do
-    #pod 'TGPControls', :path => '../../TGPControls'
-    pod 'TGPControls'
+    pod 'TGPControls', :path => '../../TGPControls'
+    #pod 'TGPControls'
 end
 
 # Failed to render and update auto layout status for UIViewController : dlopen(Cosmos.framework, 1): no suitable image found
